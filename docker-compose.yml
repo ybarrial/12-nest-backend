@@ -1,0 +1,18 @@
+#la tabulacion es muy importante
+
+version: '3'
+
+services:
+  #servicio de bd
+  db:
+    #nombre del contenedor ( maquina virtual, donde esta la imagen )
+    container_name: mean-db
+    image: mongo:5.0.16
+    #volumen para persistencia de datos ( base de datos de mongo ) la data
+    volumes:
+      - ./mongo:/data/db
+    #comunicarse del front o back hacia la bd
+    ports:
+      #puertoDeMiPc:puertoDelContenedor
+      - 27017:27017
+    restart: always
