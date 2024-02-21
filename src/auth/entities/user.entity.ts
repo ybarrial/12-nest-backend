@@ -5,7 +5,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 export class User {
 
     // MONGO AUTOGENERA EL ID AUTOMATICAMENTE
-    // _id: string;
+    _id?: string;
 
     @Prop({ unique: true, required: true })
     email: string;
