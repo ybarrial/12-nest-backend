@@ -4,13 +4,12 @@ import { Model } from 'mongoose';
 
 import * as bcryptjs  from 'bcryptjs';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto, UpdateAuthDto, LoginDto, RegisterUserDto } from './dto';
 import { User } from './entities/user.entity';
-import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtPayload } from './interfaces/jwt-payload';
+import { LoginResponse } from './interfaces/login-response';
 
 
 @Injectable()
@@ -60,7 +59,7 @@ export class AuthService {
 
   }
 
-  async login( loginDto: LoginDto ) {
+  async login( loginDto: LoginDto ): Promise<LoginResponse> {
     /**
      * User { __dirname, name, email, roles }
      * Token -> ASASDCDCD.DSDSCD.CSDSDS
@@ -86,6 +85,17 @@ export class AuthService {
       token: this.getJwtToken({ id: user.id })
     }
 
+  }
+
+  async register( registerDto: RegisterUserDto): Promise<LoginResponse> {
+
+    const user = await this.create( registerDto );
+    console.log({ user })
+
+    return {
+      user: user,
+      token: this.getJwtToken({ id: user._id })
+    }
   }
 
   findAll() {
