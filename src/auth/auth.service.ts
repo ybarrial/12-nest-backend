@@ -8,6 +8,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 
 @Injectable()
@@ -18,7 +21,8 @@ export class AuthService {
     // CON ESTE MODELO YO YA PUEDO HACER TODAS LAS INTERACCIONES A LA BASE DE DATOS RELACIONADA O
     // -TODO LO QUE TENGA DEFINIDO EN ESE SCHEMA.
     @InjectModel( User.name )
-    private userModel: Model<User>
+    private userModel: Model<User>,
+    private jwtService: JwtService,
     // END
 
   ) {}
@@ -79,7 +83,7 @@ export class AuthService {
 
     return {
       user: rest,
-      token: 'ASDADSDSDSD.SDSDSDSDSDSD.SDSDSDSD'
+      token: this.getJwtToken({ id: user.id })
     }
 
   }
@@ -98,5 +102,10 @@ export class AuthService {
 
   remove(id: number) {
     return `This action removes a #${id} auth`;
+  }
+
+  getJwtToken(payload: JwtPayload) {
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 }
